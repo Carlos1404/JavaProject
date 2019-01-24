@@ -1,17 +1,19 @@
 package com.carlos;
 
-public class MatchNoTieBreak extends Game {
+public class GameNoTieBreak extends Game {
+
+    private boolean isGameFinished;
 
 
-    public MatchNoTieBreak(Player player1, Player player2) {
-
+    public GameNoTieBreak(Player player1, Player player2) {
         super(player1, player2);
 
+        isGameFinished = false;
     }
 
     @Override
-    public boolean addScore(Player player){
-        boolean isGameFinished = false;
+    public void addScore(Player player){
+
         Player otherPlayer;
         if(player.equals(player1))
             otherPlayer = player2;
@@ -45,7 +47,10 @@ public class MatchNoTieBreak extends Game {
                 isGameFinished = true;
                 break;
         }
+    }
 
+    @Override
+    public boolean isGameFinished(Player player) {
         return isGameFinished;
     }
 

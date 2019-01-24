@@ -24,7 +24,9 @@ public abstract class Game {
         this.gameScore.put(player2, "0");
     }
 
-    public abstract boolean addScore(Player player);
+    public abstract void addScore(Player player);
+
+    public abstract boolean isGameFinished(Player player);
 
     public String getPoints(Player player) {
         return gameScore.get(player);

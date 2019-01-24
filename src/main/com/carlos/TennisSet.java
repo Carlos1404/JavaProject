@@ -39,10 +39,10 @@ public class TennisSet {
     }
 
     private void resetGame(Class<?> typeOfGame) {
-        if(typeOfGame == MatchTieBreak.class)
-            this.currentGame = new MatchTieBreak(player1, player2);
+        if(typeOfGame == GameTieBreak.class)
+            this.currentGame = new GameTieBreak(player1, player2);
         else
-            this.currentGame = new MatchNoTieBreak(player1, player2);
+            this.currentGame = new GameNoTieBreak(player1, player2);
         currentGame.resetMatch();
     }
 
@@ -57,15 +57,14 @@ public class TennisSet {
         else
             otherPlayer = player1;
 
+        currentGame.addScore(player);
 
-        boolean isGameFinished = currentGame.addScore(player);
-
-        if(isGameFinished){
+        if(currentGame.isGameFinished(player)){
             addSetPoint(player);
             int scorePlayerWinner = getGamesInSet(player);
             int scoreOtherPlayer = getGamesInSet(otherPlayer);
             if((scorePlayerWinner == 6 && scoreOtherPlayer == 6) && isTieBreak){
-                resetGame(MatchTieBreak.class);
+                resetGame(GameTieBreak.class);
             } else if((scorePlayerWinner >= 6 && scorePlayerWinner - scoreOtherPlayer >= 2) || (isTieBreak && scorePlayerWinner == 7)){
                 this.winner = player;
                 isSetFinished = true;
@@ -76,6 +75,43 @@ public class TennisSet {
 
         return isSetFinished;
     }
+
+    /*public void addGamePoint(Player player) {
+
+        currentGame.addScore(player);
+
+        if (currentGame.isGameFinished(player)) {
+            addSetPoint(player);
+        }
+    }
+
+    public boolean isSetFinished(Player player) {
+
+        boolean isSetFinished = false;
+
+        Player otherPlayer;
+
+        if (player.equals(player1))
+            otherPlayer = player2;
+        else
+            otherPlayer = player1;
+
+        int scorePlayerWinner = getGamesInSet(player);
+        int scoreOtherPlayer = getGamesInSet(otherPlayer);
+
+        if (currentGame.isGameFinished(player)) {
+            if ((scorePlayerWinner == 6 && scoreOtherPlayer == 6) && isTieBreak) {
+                resetGame(GameTieBreak.class);
+            } else if ((scorePlayerWinner >= 6 && scorePlayerWinner - scoreOtherPlayer >= 2) || (isTieBreak && scorePlayerWinner == 7)) {
+                this.winner = player;
+                isSetFinished = true;
+            } else {
+                resetGame(Game.class);
+            }
+        }
+        return isSetFinished;
+    }*/
+
 
     public String getGamePoints(Player player){
         return currentGame.getPoints(player);

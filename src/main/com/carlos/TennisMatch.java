@@ -44,6 +44,12 @@ public class TennisMatch {
             return;
         }
 
+        /*actualTennisSet.addGamePoint(player);
+
+        if(actualTennisSet.isSetFinished(player)){
+            isFinished = nextSet();
+        }*/
+
         boolean isSetWin = actualTennisSet.addGamePoint(player);
         if(isSetWin){
             isFinished = nextSet();
