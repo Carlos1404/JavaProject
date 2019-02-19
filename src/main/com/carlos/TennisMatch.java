@@ -64,7 +64,7 @@ public class TennisMatch {
     public int gamesInSetForPlayer(int setNumber, Player player) {
 
         TennisSet tennisSet = tennisSets.get(setNumber - 1);
-        return tennisSet.getGamesInSet(player);
+        return tennisSet.getGamesWonInSet(player);
 
     }
 

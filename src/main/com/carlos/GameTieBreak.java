@@ -19,10 +19,8 @@ public class GameTieBreak extends Game {
     public boolean isGameFinished(Player player) {
 
         Player otherPlayer;
-        if (player.equals(player1))
-            otherPlayer = player2;
-        else
-            otherPlayer = player1;
+
+        otherPlayer = player.equals(player1) ? player2 : player1;
 
         return Integer.valueOf(this.getPoints(player)) >= 7 && Integer.valueOf(this.getPoints(player)) - Integer.valueOf(gameScore.get(otherPlayer)) >= 2;
 

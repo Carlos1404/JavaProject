@@ -15,10 +15,8 @@ public class GameNoTieBreak extends Game {
     public void addScore(Player player) {
 
         Player otherPlayer;
-        if (player.equals(player1))
-            otherPlayer = player2;
-        else
-            otherPlayer = player1;
+
+        otherPlayer = player.equals(player1) ? player2 : player1;
 
         switch (this.getPoints(player)) {
             case "0":

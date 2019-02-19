@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class TennisSet {
 
-    private Map<Player, Integer> gamesSet;
+    private Map<Player, Integer> numberGamesWonInSet;
 
     private Player player1;
     private Player player2;
@@ -20,21 +20,21 @@ public class TennisSet {
         this.player1 = player1;
         this.player2 = player2;
 
-        gamesSet = new HashMap<>();
-        gamesSet.put(player1, 0);
-        gamesSet.put(player2, 0);
+        numberGamesWonInSet = new HashMap<>();
+        numberGamesWonInSet.put(player1, 0);
+        numberGamesWonInSet.put(player2, 0);
 
         this.isTieBreak = isTieBreak;
         resetGame(Game.class);
     }
 
     public void addSetPoint(Player player) {
-        gamesSet.put(player, getGamesInSet(player) + 1);
+        numberGamesWonInSet.put(player, getGamesWonInSet(player) + 1);
         currentGame.resetMatch();
     }
 
-    public int getGamesInSet(Player player) {
-        return gamesSet.get(player);
+    public int getGamesWonInSet(Player player) {
+        return numberGamesWonInSet.get(player);
     }
 
     private void resetGame(Class<?> typeOfGame) {
@@ -51,17 +51,14 @@ public class TennisSet {
 
         Player otherPlayer;
 
-        if (player.equals(player1))
-            otherPlayer = player2;
-        else
-            otherPlayer = player1;
+        otherPlayer = player.equals(player1) ? player2 : player1;
 
         currentGame.addScore(player);
 
         if (currentGame.isGameFinished(player)) {
             addSetPoint(player);
-            int scorePlayerWinner = getGamesInSet(player);
-            int scoreOtherPlayer = getGamesInSet(otherPlayer);
+            int scorePlayerWinner = getGamesWonInSet(player);
+            int scoreOtherPlayer = getGamesWonInSet(otherPlayer);
             if ((scorePlayerWinner == 6 && scoreOtherPlayer == 6) && isTieBreak) {
                 resetGame(GameTieBreak.class);
             } else if ((scorePlayerWinner >= 6 && scorePlayerWinner - scoreOtherPlayer >= 2) || (isTieBreak && scorePlayerWinner == 7)) {
