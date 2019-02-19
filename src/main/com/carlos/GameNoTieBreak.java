@@ -12,15 +12,15 @@ public class GameNoTieBreak extends Game {
     }
 
     @Override
-    public void addScore(Player player){
+    public void addScore(Player player) {
 
         Player otherPlayer;
-        if(player.equals(player1))
+        if (player.equals(player1))
             otherPlayer = player2;
         else
             otherPlayer = player1;
 
-        switch (this.getPoints(player)){
+        switch (this.getPoints(player)) {
             case "0":
                 gameScore.put(player, "15");
                 break;
@@ -31,7 +31,7 @@ public class GameNoTieBreak extends Game {
                 gameScore.put(player, "40");
                 break;
             case "40":
-                switch (this.getPoints(otherPlayer)){
+                switch (this.getPoints(otherPlayer)) {
                     case "40":
                         gameScore.put(player, "A");
                         break;

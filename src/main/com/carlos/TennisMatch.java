@@ -13,14 +13,14 @@ public class TennisMatch {
 
     private ArrayList<TennisSet> tennisSets;
     private TennisSet actualTennisSet;
-    private int setsCpt = -1;
+    private int setsCpt = 0;
 
     private Map<Player, Integer> setsWon;
 
     private boolean isFinished;
 
 
-    public TennisMatch(Player player1, Player player2, MatchType matchType, boolean tieBreakInLastSet){
+    public TennisMatch(Player player1, Player player2, MatchType matchType, boolean tieBreakInLastSet) {
 
         this.player1 = player1;
         this.player2 = player2;
@@ -35,69 +35,55 @@ public class TennisMatch {
         this.isFinished = nextSet();
     }
 
-    public void updateWithPointWonBy(Player player){
-        if(isFinished){
-            return;
+    public void updateWithPointWonBy(Player player) {
+
+        if (!isFinished && (player == player1 || player == player2)) {
+            if (actualTennisSet.addGamePoint(player)) {
+                isFinished = nextSet();
+            }
         }
 
-        if(player != player1 && player != player2){
-            return;
-        }
-
-        /*actualTennisSet.addGamePoint(player);
-
-        if(actualTennisSet.isSetFinished(player)){
-            isFinished = nextSet();
-        }*/
-
-        boolean isSetWin = actualTennisSet.addGamePoint(player);
-        if(isSetWin){
-            isFinished = nextSet();
-        }
     }
 
-    public String pointsForPlayer(Player player){
+    public String pointsForPlayer(Player player) {
         return actualTennisSet.getGamePoints(player);
     }
 
-    public int currentSetNumber(){
-        return setsCpt +1;
+    public int currentSetNumber() {
+        return setsCpt;
     }
 
-    public int gamesInCurrentSetForPlayer(Player player){
-        if(player != player1 && player != player2){
+    public int gamesInCurrentSetForPlayer(Player player) {
+        if (player != player1 && player != player2) {
             return -1;
+        } else {
+            return gamesInSetForPlayer(currentSetNumber(), player);
         }
-
-        return gamesInSetForPlayer(currentSetNumber(), player);
     }
 
-    public int gamesInSetForPlayer(int setId, Player player){
-        setId -= 1;
-        if(setId > setsCpt){
-            return -1;
-        }
+    public int gamesInSetForPlayer(int setNumber, Player player) {
 
-        TennisSet tennisSet = tennisSets.get(setId);
+        TennisSet tennisSet = tennisSets.get(setNumber - 1);
         return tennisSet.getGamesInSet(player);
+
     }
 
-    public boolean isFinished(){
+    public boolean isFinished() {
         return isFinished;
     }
 
     private boolean nextSet() {
-        if(!isFinished && needMoreSet()){
+        if (!isFinished && needMoreSet()) {
             setsCpt++;
             TennisSet tennisSet;
-            if(isLastSet() && !tieBreakInLastSet){
+            if (isLastSet() && !tieBreakInLastSet) {
                 tennisSet = new TennisSet(player1, player2, false);
             } else {
                 tennisSet = new TennisSet(player1, player2, true);
             }
 
             tennisSets.add(tennisSet);
-            actualTennisSet = tennisSets.get(setsCpt);
+            actualTennisSet = tennisSets.get(tennisSets.size() - 1);
             return false;
         } else {
             return true;
@@ -112,20 +98,19 @@ public class TennisMatch {
 
         Map<Player, Integer> setsWin = new HashMap<>();
 
-        for(TennisSet set : tennisSets){
-            if(set.isWin()){
-                if(setsWin.containsKey(set.getWinner())){
-                    setsWin.put(set.getWinner(), setsWin.get(set.getWinner())+1);
+        for (TennisSet set : tennisSets) {
+            if (set.isWin()) {
+                if (setsWin.containsKey(set.getWinner())) {
+                    setsWin.put(set.getWinner(), setsWin.get(set.getWinner()) + 1);
                 } else {
                     setsWin.put(set.getWinner(), 1);
                 }
             }
         }
 
-        if(	(setsWin.containsKey(player1) && setsWin.get(player1) >= matchType.numberOfSetsToWin()) || 	(setsWin.containsKey(player2) && setsWin.get(player2) >= matchType.numberOfSetsToWin())){
-            return  false;
-        }
-        else {
+        if ((setsWin.containsKey(player1) && setsWin.get(player1) >= matchType.numberOfSetsToWin()) || (setsWin.containsKey(player2) && setsWin.get(player2) >= matchType.numberOfSetsToWin())) {
+            return false;
+        } else {
             return true;
         }
     }
